@@ -161,16 +161,16 @@ function updateNavbar() {
 async function loadHomeData() {
     try {
         // 获取金币账户信息
-        const coinAccount = await apiRequest('/coin/account');
+        const coinAccount = await apiRequest('/api/coin/account');
         document.getElementById('homeCoins').textContent = coinAccount.balance || 0;
         
         // 获取VIP状态
-        const vipInfo = await apiRequest('/vip/info');
+        const vipInfo = await apiRequest('/api/vip/info');
         const vipStatus = vipInfo && vipInfo.status === 1 ? 'VIP会员' : '未开通';
         document.getElementById('homeVipStatus').textContent = vipStatus;
         
         // 获取参赛记录
-        const participations = await apiRequest('/contest/my-participations');
+        const participations = await apiRequest('/api/contest/my-participations');
         document.getElementById('homeContests').textContent = participations.length || 0;
         
         // 计算最佳排名
@@ -190,7 +190,7 @@ async function loadHomeData() {
 // 加载比赛列表
 async function loadContests() {
     try {
-        const contests = await apiRequest('/contest/list');
+        const contests = await apiRequest('/api/contest/list');
         const contestsList = document.getElementById('contestsList');
         
         if (!contests || contests.length === 0) {
@@ -254,11 +254,11 @@ function getStatusText(status) {
 // 查看比赛详情
 async function viewContestDetail(contestId) {
     try {
-        const contest = await apiRequest(`/contest/${contestId}`);
+        const contest = await apiRequest(`/api/contest/${contestId}`);
         currentContest = contest;
         
         // 获取排行榜
-        const leaderboard = await apiRequest(`/contest/${contestId}/ranking`);
+        const leaderboard = await apiRequest(`/api/contest/${contestId}/ranking`);
         
         const contestDetail = document.getElementById('contestDetail');
         contestDetail.innerHTML = `
@@ -325,7 +325,7 @@ async function viewContestDetail(contestId) {
 // 报名参赛
 async function joinContest(contestId) {
     try {
-        await apiRequest('/contest/join', {
+        await apiRequest('/api/contest/join', {
             method: 'POST',
             body: JSON.stringify({ contestId })
         });
@@ -342,7 +342,7 @@ async function joinContest(contestId) {
 // 开始比赛
 async function startContest(contestId) {
     try {
-        const data = await apiRequest(`/contest/${contestId}/start`, {
+        const data = await apiRequest(`/api/contest/${contestId}/start`, {
             method: 'POST'
         });
         
@@ -456,7 +456,7 @@ async function submitContestAnswer() {
     const duration = Math.floor((Date.now() - questionStartTime) / 1000);
     
     try {
-        const result = await apiRequest('/contest/answer', {
+        const result = await apiRequest('/api/contest/answer', {
             method: 'POST',
             body: JSON.stringify({
                 contestId: currentContest.id,
@@ -506,7 +506,7 @@ function showAnswerResult(result) {
 // 完成比赛
 async function finishContest() {
     try {
-        const result = await apiRequest(`/contest/${currentContest.id}/finish`, {
+        const result = await apiRequest(`/api/contest/${currentContest.id}/finish`, {
             method: 'POST'
         });
         
@@ -574,8 +574,8 @@ function formatDuration(seconds) {
 // 加载VIP状态
 async function loadVipStatus() {
     try {
-        const vipInfo = await apiRequest('/vip/info');
-        const coinAccount = await apiRequest('/coin/account');
+        const vipInfo = await apiRequest('/api/vip/info');
+        const coinAccount = await apiRequest('/api/coin/account');
         
         document.getElementById('currentVipStatus').textContent = 
             vipInfo && vipInfo.status === 1 ? 'VIP会员' : '未开通';
@@ -602,7 +602,7 @@ async function purchaseVip(level) {
     }
     
     try {
-        await apiRequest('/vip/purchase', {
+        await apiRequest('/api/vip/purchase', {
             method: 'POST',
             body: JSON.stringify({ level })
         });
@@ -617,8 +617,8 @@ async function purchaseVip(level) {
 // 加载金币数据
 async function loadCoinData() {
     try {
-        const account = await apiRequest('/coin/account');
-        const transactions = await apiRequest('/coin/transactions');
+        const account = await apiRequest('/api/coin/account');
+        const transactions = await apiRequest('/api/coin/transactions');
         
         document.getElementById('coinBalance').textContent = account.balance || 0;
         document.getElementById('coinTotalRecharge').textContent = account.totalRecharge || 0;
@@ -668,7 +668,7 @@ async function rechargeCoins() {
     }
     
     try {
-        await apiRequest('/coin/recharge', {
+        await apiRequest('/api/coin/recharge', {
             method: 'POST',
             body: JSON.stringify({ 
                 amount: parseInt(amount),
@@ -697,7 +697,7 @@ async function withdrawCoins() {
     }
     
     try {
-        await apiRequest('/coin/withdraw', {
+        await apiRequest('/api/coin/withdraw', {
             method: 'POST',
             body: JSON.stringify({ coinAmount: parseInt(coinAmount) })
         });
@@ -712,9 +712,9 @@ async function withdrawCoins() {
 // 加载个人中心数据
 async function loadProfileData() {
     try {
-        const participations = await apiRequest('/contest/my-participations');
-        const coinAccount = await apiRequest('/coin/account');
-        const vipInfo = await apiRequest('/vip/info');
+        const participations = await apiRequest('/api/contest/my-participations');
+        const coinAccount = await apiRequest('/api/coin/account');
+        const vipInfo = await apiRequest('/api/vip/info');
         
         document.getElementById('profileUsername').textContent = currentUser.username;
         document.getElementById('profileCoins').textContent = coinAccount.balance || 0;
@@ -798,7 +798,7 @@ document.addEventListener('DOMContentLoaded', () => {
     const token = localStorage.getItem('token');
     if (token) {
         // 尝试自动登录
-        apiRequest('/auth/verify').then(user => {
+        apiRequest('/api/auth/verify').then(user => {
             currentUser = user;
             showPage('home');
         }).catch(() => {
