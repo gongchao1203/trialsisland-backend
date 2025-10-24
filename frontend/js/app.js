@@ -792,20 +792,3 @@ function showToast(message, type = 'success') {
         }, 300);
     }, 3000);
 }
-
-// 初始化
-document.addEventListener('DOMContentLoaded', () => {
-    const token = localStorage.getItem('token');
-    if (token) {
-        // 尝试自动登录
-        apiRequest('/api/auth/verify').then(user => {
-            currentUser = user;
-            showPage('home');
-        }).catch(() => {
-            localStorage.removeItem('token');
-            showPage('login');
-        });
-    } else {
-        showPage('login');
-    }
-});
