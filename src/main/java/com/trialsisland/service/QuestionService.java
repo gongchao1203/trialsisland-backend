@@ -122,6 +122,17 @@ public class QuestionService {
     }
 
     /**
+     * 获取题目实体（包含答案，仅供内部服务使用）
+     */
+    public Question getQuestionEntity(Long questionId) {
+        Question question = questionBank.get(questionId);
+        if (question == null) {
+            throw new BusinessException("题目不存在");
+        }
+        return question;
+    }
+
+    /**
      * 随机获取一道题目
      */
     public QuestionResponse getRandomQuestion() {

@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>刷题竞赛系统</title>
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+    <!-- 导航栏 -->
+    <nav class="navbar">
+        <div class="container">
+            <div class="nav-brand">🏝️ 刷题竞赛系统</div>
+            <div class="nav-menu" id="navMenu">
+                <a href="#" class="nav-link" onclick="showPage('home')">首页</a>
+                <a href="#" class="nav-link" onclick="showPage('contests')">比赛列表</a>
+                <a href="#" class="nav-link" onclick="showPage('vip')">VIP会员</a>
+                <a href="#" class="nav-link" onclick="showPage('coin')">金币中心</a>
+                <a href="#" class="nav-link" onclick="showPage('profile')">个人中心</a>
+            </div>
+            <div class="nav-user" id="navUser">
+                <span id="userInfo"></span>
+                <button class="btn btn-small" onclick="logout()">退出</button>
+            </div>
+            <div class="nav-login" id="navLogin">
+                <button class="btn btn-small" onclick="showPage('login')">登录</button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- 主内容区 -->
+    <main class="main-content">
+        <!-- 登录页面 -->
+        <div id="loginPage" class="page">
+            <div class="auth-container">
+                <div class="auth-card">
+                    <h2>登录</h2>
+                    <form id="loginForm" onsubmit="handleLogin(event)">
+                        <div class="form-group">
+                            <label>用户名</label>
+                            <input type="text" id="username" class="form-control" placeholder="请输入用户名" required>
+                        </div>
+                        <div class="form-group">
+                            <label>密码</label>
+                            <input type="password" id="password" class="form-control" placeholder="请输入密码" required>
+                        </div>
+                        <button type="submit" class="btn btn-primary btn-block">登录</button>
+                    </form>
+                    <div class="auth-tip">
+                        <p>测试账号：admin / 123456 或 user / 123456</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 首页 -->
+        <div id="homePage" class="page" style="display:none;">
+            <div class="container">
+                <div class="hero-section">
+                    <h1>欢迎来到刷题竞赛系统</h1>
+                    <p>挑战自我，赢取金币奖励</p>
+                </div>
+                
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-icon">💰</div>
+                        <div class="stat-value" id="homeCoins">0</div>
+                        <div class="stat-label">我的金币</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">👑</div>
+                        <div class="stat-value" id="homeVipStatus">未开通</div>
+                        <div class="stat-label">VIP状态</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">🏆</div>
+                        <div class="stat-value" id="homeContests">0</div>
+                        <div class="stat-label">参赛次数</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-icon">⭐</div>
+                        <div class="stat-value" id="homeBestRank">-</div>
+                        <div class="stat-label">最佳排名</div>
+                    </div>
+                </div>
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary btn-large" onclick="showPage('contests')">查看比赛</button>
+                    <button class="btn btn-success btn-large" onclick="showPage('vip')">开通VIP</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- 比赛列表页面 -->
+        <div id="contestsPage" class="page" style="display:none;">
+            <div class="container">
+                <h2>比赛列表</h2>
+                <div id="contestsList" class="contests-grid"></div>
+            </div>
+        </div>
+
+        <!-- VIP会员页面 -->
+        <div id="vipPage" class="page" style="display:none;">
+            <div class="container">
+                <h2>VIP会员</h2>
+                <div class="vip-status" id="vipStatus"></div>
+                <div class="vip-plans">
+                    <div class="vip-card">
+                        <h3>月卡</h3>
+                        <div class="vip-price">¥30</div>
+                        <div class="vip-benefits">
+                            <p>✓ 赠送300金币</p>
+                            <p>✓ 参加所有比赛</p>
+                            <p>✓ 有效期30天</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="purchaseVip(1)">购买月卡</button>
+                    </div>
+                    <div class="vip-card vip-recommended">
+                        <div class="vip-badge">推荐</div>
+                        <h3>季卡</h3>
+                        <div class="vip-price">¥80</div>
+                        <div class="vip-benefits">
+                            <p>✓ 赠送1000金币</p>
+                            <p>✓ 参加所有比赛</p>
+                            <p>✓ 有效期90天</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="purchaseVip(2)">购买季卡</button>
+                    </div>
+                    <div class="vip-card">
+                        <h3>年卡</h3>
+                        <div class="vip-price">¥288</div>
+                        <div class="vip-benefits">
+                            <p>✓ 赠送5000金币</p>
+                            <p>✓ 参加所有比赛</p>
+                            <p>✓ 有效期365天</p>
+                        </div>
+                        <button class="btn btn-primary" onclick="purchaseVip(3)">购买年卡</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 金币中心页面 -->
+        <div id="coinPage" class="page" style="display:none;">
+            <div class="container">
+                <h2>金币中心</h2>
+                <div class="coin-account" id="coinAccount"></div>
+                
+                <div class="coin-actions">
+                    <div class="coin-action-card">
+                        <h3>充值金币</h3>
+                        <form onsubmit="handleRecharge(event)">
+                            <div class="form-group">
+                                <label>充值金额（金币）</label>
+                                <input type="number" id="rechargeAmount" class="form-control" min="100" step="100" value="1000" required>
+                                <small>最少充值100金币，100金币=1元</small>
+                            </div>
+                            <button type="submit" class="btn btn-success">充值</button>
+                        </form>
+                    </div>
+                    
+                    <div class="coin-action-card">
+                        <h3>提现</h3>
+                        <form onsubmit="handleWithdraw(event)">
+                            <div class="form-group">
+                                <label>提现金额（金币）</label>
+                                <input type="number" id="withdrawAmount" class="form-control" min="100" step="100" value="1000" required>
+                                <small>最少提现100金币，100金币=1元</small>
+                            </div>
+                            <button type="submit" class="btn btn-warning">提现</button>
+                        </form>
+                    </div>
+                </div>
+
+                <div class="coin-transactions">
+                    <h3>交易记录</h3>
+                    <div id="transactionsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 个人中心页面 -->
+        <div id="profilePage" class="page" style="display:none;">
+            <div class="container">
+                <h2>个人中心</h2>
+                <div class="profile-info" id="profileInfo"></div>
+                <div class="profile-participations">
+                    <h3>我的参赛记录</h3>
+                    <div id="participationsList"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- 比赛详情页面 -->
+        <div id="contestDetailPage" class="page" style="display:none;">
+            <div class="container">
+                <div id="contestDetail"></div>
+            </div>
+        </div>
+
+        <!-- 答题页面 -->
+        <div id="contestQuestionPage" class="page" style="display:none;">
+            <div class="container">
+                <div id="contestQuestion"></div>
+            </div>
+        </div>
+    </main>
+
+    <!-- Toast提示 -->
+    <div id="toast" class="toast"></div>
+
+    <script src="js/app.js"></script>
+</body>
+</html>
