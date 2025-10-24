@@ -29,4 +29,10 @@ public class GlobalExceptionHandler {
         return Result.error("参数校验失败：" + message);
     }
 
+    @ExceptionHandler(AuthenticationException.class)
+    public Result<String> handleAuthenticationException(AuthenticationException e) {
+        log.error("认证异常：{}", e.getMessage());
+        return Result.error(401, e.getMessage());
+    }
+
 }
