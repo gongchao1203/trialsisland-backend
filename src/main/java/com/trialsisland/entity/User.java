@@ -47,6 +47,11 @@ public class User implements Serializable {
     private Integer status;
 
     /**
+     * 金币余额
+     */
+    private Long coinBalance;
+
+    /**
      * 创建时间
      */
     private LocalDateTime createTime;
